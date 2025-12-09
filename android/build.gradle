@@ -1,0 +1,70 @@
+group = "com.burhanrabbani.acs_flutter_sdk"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = "1.9.24"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.5.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "com.burhanrabbani.acs_flutter_sdk"
+
+    compileSdk = 34
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        minSdk = 24
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
+            }
+        }
+    }
+}
+
+dependencies {
+    // Azure Communication Services SDKs
+    implementation("com.azure.android:azure-communication-calling:2.15.0")
+    implementation("com.azure.android:azure-communication-chat:2.0.3")
+    implementation("com.azure.android:azure-communication-common:1.2.1")
+
+    // Test dependencies
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.mockito:mockito-core:5.0.0")
+}
